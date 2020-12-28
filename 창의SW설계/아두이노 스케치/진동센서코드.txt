@@ -1,0 +1,56 @@
+
+void setup() 
+{
+
+  // put your setup code here, to run once:
+
+    Serial.begin(9600);
+
+    pinMode( 6 , OUTPUT);
+   
+   
+      
+  
+
+ }
+void loop()
+{
+  
+    if(Serial.available()){
+    int r=Serial.read();
+     if(r=='c')
+    {
+      analogWrite( 6 , 100 );
+      delay(1000);
+      analogWrite( 6 , 0 );
+      delay(30000000000);
+    }
+    if(r=='d')
+    {
+      analogWrite( 6 , 100 );
+      delay(500);
+       analogWrite( 6 , 0 );
+      delay(300);
+      analogWrite( 6 , 100 );
+      delay(500);
+      analogWrite( 6 , 0 );
+      delay(30000000000);
+      }
+      if(r=='e')
+    {
+      analogWrite( 6 , 100 );
+      delay(500);
+       analogWrite( 6 , 0 );
+      delay(300);
+      analogWrite( 6 , 100 );
+      delay(500);
+       analogWrite( 6 , 0 );
+      delay(300);
+       analogWrite( 6 , 100 );
+      delay(500);
+      analogWrite( 6 , 0 );
+      delay(30000000000);
+      }
+    }
+    
+  }

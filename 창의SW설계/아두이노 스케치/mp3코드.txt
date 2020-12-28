@@ -1,0 +1,131 @@
+#include <SFEMP3Shield.h>
+#include <SFEMP3ShieldConfig.h>
+#include <SFEMP3Shieldmainpage.h>
+
+
+
+#include <BlockDriver.h>
+#include <FreeStack.h>
+#include <MinimumSerial.h>
+#include <SdFat.h>
+#include <SdFatConfig.h>
+#include <SysCall.h>
+
+const int SOUND_SENSOR_PIN=A0;
+int sensorValue;
+
+#include <SPI.h>
+
+
+
+
+
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+  #include <TimerOne.h>
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  #include <SimpleTimer.h>
+#endif
+
+SdFat sd;
+SFEMP3Shield MP3player;
+void setup() {
+  uint8_t result;
+  Serial.begin(9600);
+  pinMode( 10 , OUTPUT);
+  if(!sd.begin(SD_SEL, SPI_FULL_SPEED)) sd.initErrorHalt();
+  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
+  if(!sd.chdir("/")) sd.errorHalt("sd.chdir");
+  result = MP3player.begin();
+}
+
+void loop() {
+ sensorValue=analogRead(SOUND_SENSOR_PIN);
+ #if defined(USE_MP3_REFILL_MEANS) \
+    && ( (USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) \
+    ||   (USE_MP3_REFILL_MEANS == USE_MP3_Polled)      )
+
+  MP3player.available();
+#endif
+  
+  
+
+ Serial.print(F("sound sensor : "));
+ Serial.println(sensorValue);
+
+
+   uint8_t result;
+  char title[30];
+  char artist[30];
+  char album[30];
+  if(Serial.available())
+  {
+    int k=Serial.read();
+    MP3player.setVolume(70,70);
+    if(sensorValue>30){
+      MP3player.setVolume(50,50);
+      Serial.print("change!\n");}
+  
+  if(k=='a')
+   {
+    result=MP3player.playTrack(1);
+   MP3player.trackTitle((char*)&title);
+   MP3player.trackArtist((char*)&artist);
+   MP3player.trackAlbum((char*)&album);
+    analogWrite( 10 , 100 );
+      delay(500);
+      analogWrite( 10 , 0 );
+      delay(4000);
+  
+   }
+  if(k=='e')
+ {
+ result=MP3player.playTrack(2);
+   MP3player.trackTitle((char*)&title);
+   MP3player.trackArtist((char*)&artist);
+   MP3player.trackAlbum((char*)&album);
+   analogWrite( 10 , 100 );
+   delay(500);
+   analogWrite( 10 , 0 );
+   delay(4000);
+ MP3player.stopTrack();
+ }
+ if(k=='c')
+ {
+  result=MP3player.playTrack(3);
+   MP3player.trackTitle((char*)&title);
+   MP3player.trackArtist((char*)&artist);
+   MP3player.trackAlbum((char*)&album);
+  analogWrite( 10 , 100 );
+   delay(500);
+   analogWrite( 10 , 0 );
+   delay(300);
+ analogWrite( 10 , 100 );
+  delay(500);
+  analogWrite( 10 , 0 );
+      delay(4000);
+  MP3player.stopTrack();
+ }
+ 
+ if(k=='d')
+ {result=MP3player.playTrack(4);
+   MP3player.trackTitle((char*)&title);
+   MP3player.trackArtist((char*)&artist);
+   MP3player.trackAlbum((char*)&album); 
+  
+ analogWrite(10 , 100 );
+ delay(500);
+ analogWrite( 10 , 0 );
+      delay(300);
+      analogWrite( 10 , 100 );
+      delay(500);
+      analogWrite( 10 , 0 );
+      delay(300);
+      analogWrite( 10 , 100 );
+      delay(500);
+      analogWrite( 10 , 0 );
+      delay(4000); 
+      MP3player.stopTrack();
+
+ }
+  }
+}

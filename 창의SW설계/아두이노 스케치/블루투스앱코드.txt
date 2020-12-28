@@ -1,0 +1,38 @@
+#include <SoftwareSerial.h>
+ char myString[100];
+SoftwareSerial BTSerial(9, 10);   //bluetooth module Tx:Digital 2 Rx:Digital 3
+ int i=0;
+int j;  
+
+char toSend;
+
+void setup() {
+  
+  Serial.begin(9600);
+  BTSerial.begin(9600);
+}
+
+void loop() {
+
+  
+  
+  //Read from usb serial to bluetooth
+  
+  if(Serial.available())
+  {    
+    
+    toSend = (char)Serial.read();
+    myString[i]=toSend;
+    if (myString[i]== '\0')
+    {
+     delay(10000);
+    }    
+  
+      BTSerial.write(myString[i]);
+      Serial.write(myString[i]);
+  }
+  
+    
+} 
+
+  

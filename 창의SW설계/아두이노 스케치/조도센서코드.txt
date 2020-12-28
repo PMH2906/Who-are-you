@@ -1,0 +1,29 @@
+int cds_sensor=A0;
+int LED=7;
+
+void setup() {
+ 
+ Serial.begin(9600);
+ pinMode(LED,OUTPUT);
+ pinMode(6,OUTPUT);
+  //pinMode(9, OUTPUT);
+}
+ 
+void loop() {
+  analogWrite( 6 , 50 );
+  delay(1000);
+ 
+  analogWrite( 6 , 0 );
+  delay(3000);
+  int cds_val=analogRead(cds_sensor);
+  Serial.print("Cds=");
+  Serial.println(cds_val);
+  if(cds_val>800){
+    digitalWrite(LED,HIGH);
+    }
+    else{
+      digitalWrite(LED,LOW);
+      Serial.println("LED OFF");
+      }
+      delay(50);
+}
